@@ -37,39 +37,76 @@ document.addEventListener("DOMContentLoaded", () => {
         return result
     }
 
+
+
     let evaluateOne = 0;
     let evaluateTwo = 0;
 
+    let integerValueOne;
+    let integerValueTwo;
+
     let wasOperatorBtnPressed = false
 
+    const input = document.querySelector(".input");
     const operatorBtns = document.querySelectorAll(".operator-btn");
-    const displayContent = document.querySelector("#input");
     const nmbrButtons = document.querySelectorAll(".btn");
+    const valuesOne = document.querySelector(".valuesOne");
+    const valuesTwo = document.querySelector(".valuesTwo");
+    const operator = document.querySelector(".operator");
+    const clearBtn = document.querySelector("#clearBtn");
+    const equals = document.querySelector("#equalsBtn");
+    const divBtn = document.querySelector("#btnDiv")
+    const mulBtn = document.querySelector("#btnMul")
+    const subBtn = document.querySelector("#btnSub")
+    const addBtn = document.querySelector("#btnAdd")
+
+    clearBtn.addEventListener("click", () => {
+        valuesOne.innerHTML = '';
+        operator.innerHTML = '';
+        valuesTwo.innerHTML = '';
+    })
+
+
 
     operatorBtns.forEach(operatorBtn => {
         operatorBtn.addEventListener("click", () => {
             wasOperatorBtnPressed = true
+            operator.textContent = operatorBtn.textContent;
         })
     })
-
     nmbrButtons.forEach(nmbrButton => {
         nmbrButton.addEventListener("click", () => {
-            let displayValue = document.createElement("div");
-            displayValue.textContent = operatorBtns.textContent;
-            displayValue.textContent = nmbrButton.textContent;
-            displayValue.classList.add("values");
-            displayContent.appendChild(displayValue);
-
             if (!wasOperatorBtnPressed) {
                 evaluateOne = parseInt(nmbrButton.textContent);
+                valuesOne.textContent += nmbrButton.textContent;
+                integerValueOne = parseInt(valuesOne.textContent);
                 console.log("evaluateOne: ", evaluateOne);
             }
             else if (wasOperatorBtnPressed) {
                 evaluateTwo = parseInt(nmbrButton.textContent);
+                valuesTwo.textContent += nmbrButton.textContent;
+                integerValueTwo = parseInt(valuesTwo.textContent);
                 console.log("evaluateTwo: ", evaluateTwo);
             }
         })
     })
+
+    equals.addEventListener("click", () => {
+        if (operator.innerHTML === divBtn.textContent) {
+            console.log(divide(integerValueOne, integerValueTwo))
+        }
+        else if (operator.innerHTML === mulBtn.textContent) {
+            console.log(multiply(integerValueOne, integerValueTwo))
+        }
+        else if (operator.innerHTML === subBtn.textContent) {
+            console.log(subtract(integerValueOne, integerValueTwo))
+        }
+        else if (operator.innerHTML === addBtn.textContent) {
+            console.log(add(integerValueOne, integerValueTwo))
+        }
+        wasOperatorBtnPressed = false;
+    })
+
 
 
 })

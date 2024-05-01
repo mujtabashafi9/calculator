@@ -44,11 +44,3 @@ body {
 .buttons button:hover {
     background-color: #d4d4d4;
 }
-
-.operator {
-    background-color: #f0ad4e;
-}
-
-.operator:hover {
-    background-color: #ec971f;
-}
