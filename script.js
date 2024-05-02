@@ -37,17 +37,71 @@ document.addEventListener("DOMContentLoaded", () => {
         return result
     }
 
+    function getvalue(nmbrButton) {
+        nmbrButton.addEventListener("click", () => {
+            total.textContent = '';
+            if (!wasOperatorBtnPressed) {
+                evaluateOne = parseFloat(nmbrButton.textContent);
+                valuesOne.textContent += nmbrButton.textContent;
+                integerValueOne = parseFloat(valuesOne.textContent);
+                console.log("evaluateOne: ", evaluateOne);
+            }
+            else if (wasOperatorBtnPressed) {
+                evaluateTwo = parseFloat(nmbrButton.textContent);
+                valuesTwo.textContent += nmbrButton.textContent;
+                integerValueTwo = parseFloat(valuesTwo.textContent);
+                console.log("evaluateTwo: ", evaluateTwo);
+            }
+        })
 
+    }
+
+    function getOperator(operatorBtn) {
+        operatorBtn.addEventListener("click", () => {
+            wasOperatorBtnPressed = true
+            operator.textContent = operatorBtn.textContent;
+        })
+    }
+
+    function whenClear() {
+        valuesOne.innerHTML = '';
+        operator.innerHTML = '';
+        valuesTwo.innerHTML = '';
+        total.textContent = '';
+    }
+
+    function operate() {
+        if (operator.innerHTML === divBtn.textContent) {
+            operationResult = divide(integerValueOne, integerValueTwo)
+            console.log(operationResult)
+        }
+        else if (operator.innerHTML === mulBtn.textContent) {
+            operationResult = multiply(integerValueOne, integerValueTwo)
+        }
+        else if (operator.innerHTML === subBtn.textContent) {
+            operationResult = subtract(integerValueOne, integerValueTwo)
+        }
+        else if (operator.innerHTML === addBtn.textContent) {
+            operationResult = add(integerValueOne, integerValueTwo)
+        }
+        wasOperatorBtnPressed = false;
+        valuesOne.textContent = operationResult;
+        integerValueOne = parseFloat(valuesOne.textContent);
+        operator.innerHTML = '';
+        valuesTwo.innerHTML = '';
+    }
 
     let evaluateOne = 0;
     let evaluateTwo = 0;
 
     let integerValueOne;
     let integerValueTwo;
+    let operationResult;
+    let keyValue;
 
     let wasOperatorBtnPressed = false
 
-    const input = document.querySelector(".input");
+    const total = document.querySelector(".total")
     const operatorBtns = document.querySelectorAll(".operator-btn");
     const nmbrButtons = document.querySelectorAll(".btn");
     const valuesOne = document.querySelector(".valuesOne");
@@ -60,56 +114,42 @@ document.addEventListener("DOMContentLoaded", () => {
     const subBtn = document.querySelector("#btnSub")
     const addBtn = document.querySelector("#btnAdd")
 
-    clearBtn.addEventListener("click", () => {
-        valuesOne.innerHTML = '';
-        operator.innerHTML = '';
-        valuesTwo.innerHTML = '';
-    })
+    clearBtn.addEventListener("click", whenClear)
 
 
 
-    operatorBtns.forEach(operatorBtn => {
-        operatorBtn.addEventListener("click", () => {
-            wasOperatorBtnPressed = true
-            operator.textContent = operatorBtn.textContent;
-        })
-    })
-    nmbrButtons.forEach(nmbrButton => {
-        nmbrButton.addEventListener("click", () => {
+
+    operatorBtns.forEach(getOperator)
+
+    document.addEventListener("keydown", (event) => {
+        keyValue = event.key
+        if (event.key == 'Backspace') {
+            whenClear()
+        }
+        if (event.key == '/' || event.key == '+' || event.key == '-' || event.key == '*') {
+            operator.textContent = event.key;
+            wasOperatorBtnPressed = true;
+        }
+        else if (event.key == 'Enter') {
+            operate()
+        }
+        else {
+            console.log(keyValue)
             if (!wasOperatorBtnPressed) {
-                evaluateOne = parseInt(nmbrButton.textContent);
-                valuesOne.textContent += nmbrButton.textContent;
-                integerValueOne = parseInt(valuesOne.textContent);
-                console.log("evaluateOne: ", evaluateOne);
+                valuesOne.textContent += keyValue;
+                integerValueOne = parseFloat(valuesOne.textContent);
             }
             else if (wasOperatorBtnPressed) {
-                evaluateTwo = parseInt(nmbrButton.textContent);
-                valuesTwo.textContent += nmbrButton.textContent;
-                integerValueTwo = parseInt(valuesTwo.textContent);
-                console.log("evaluateTwo: ", evaluateTwo);
+                valuesTwo.textContent += keyValue;
+                integerValueTwo = parseFloat(valuesTwo.textContent);
             }
-        })
+        }
     })
 
-    equals.addEventListener("click", () => {
-        if (operator.innerHTML === divBtn.textContent) {
-            console.log(divide(integerValueOne, integerValueTwo))
-        }
-        else if (operator.innerHTML === mulBtn.textContent) {
-            console.log(multiply(integerValueOne, integerValueTwo))
-        }
-        else if (operator.innerHTML === subBtn.textContent) {
-            console.log(subtract(integerValueOne, integerValueTwo))
-        }
-        else if (operator.innerHTML === addBtn.textContent) {
-            console.log(add(integerValueOne, integerValueTwo))
-        }
-        wasOperatorBtnPressed = false;
-    })
+    nmbrButtons.forEach(getvalue)
 
+    equals.addEventListener("click", operate)
 
 
 })
 
-
-// types number presses operator number already typed pushed to empty variable
